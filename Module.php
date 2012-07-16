@@ -2,9 +2,9 @@
 
 namespace Zucchi;
 
-use Zend\Module\Consumer\AutoloaderProvider;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 
-class Module implements AutoloaderProvider
+class Module implements AutoloaderProviderInterface
 {
     public function getAutoloaderConfig()
     {
@@ -22,6 +22,6 @@ class Module implements AutoloaderProvider
 
     public function getConfig($env = null)
     {
-        return array();
+        return include __DIR__ . '/config/module.config.php';
     }
 }
