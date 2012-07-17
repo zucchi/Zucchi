@@ -89,7 +89,7 @@ class BootstrapRow extends AbstractHelper
      */
     protected $labelAttributes;
 
-    /**
+    /**<a href="http://www.michaelgallego.fr/blog/?p=190" title="New Zend\Form features explained" target="_blank">blog post</a>
      * @var FormLabel
      */
     protected $labelHelper;
@@ -126,7 +126,7 @@ class BootstrapRow extends AbstractHelper
 
     /**
      * Utility form helper that renders a label (if it exists), an element and errors
-     *
+     *protected $group
      * @param ElementInterface $element
      * @return string
      * @throws \Zend\Form\Exception\DomainException
@@ -138,7 +138,10 @@ class BootstrapRow extends AbstractHelper
         $elementHelper       = $this->getElementHelper();
         $elementErrorsHelper = $this->getElementErrorsHelper();
         $label               = $element->getLabel();
-        $elementErrors       = $elementErrorsHelper->render($element);
+        $elementErrorsHelper->setMessageOpenFormat('<div%s>')
+                            ->setMessageSeparatorString('<br/>')
+                            ->setMessageCloseString('</div>');
+        $elementErrors       = $elementErrorsHelper->render($element, array('class' => 'help-block'));
         $elementStatus       = $this->getElementStatus($element);
         $type                = $element->getAttribute('type');
         $bootstrapOptions    = $element->getOption('bootstrap');
@@ -147,53 +150,57 @@ class BootstrapRow extends AbstractHelper
         $labelOpen = $labelClose = $labelAttributes = ''; // initialise label variables
         $elementHelp = '';
         
-        if (!empty($label)) {
-            if (in_array($formStyle, $this->compactFormStyles)) {
-                $element->setAttribute('placeholder', $label);
-                
-            } else {
-                
-                $label = $escapeHtmlHelper($label);
-                $labelAttributes = $element->getLabelAttributes();
-    
-                if (empty($labelAttributes)) {
-                    $labelAttributes = $this->labelAttributes;
-                }
-                
-                $labelAttributes['class'] = isset($labelAttributes['class']) 
-                                          ? $labelAttributes['class'] . ' control-label' 
-                                          : 'control-label';
-                
-                $labelOpen  = $labelHelper->openTag($labelAttributes);
-                $labelClose = $labelHelper->closeTag();
-            }
-        }
+        if ($type == 'hidden') {
+            $markup = $elementHelper->render($element);
+            $markup .= $elementErrors;
+        } else {
+            if (!empty($label)) {
+                if (in_array($formStyle, $this->compactFormStyles)) {
+                    $element->setAttribute('placeholder', $label);
+                    
+                } else {
+                    
+                    $label = $escapeHtmlHelper($label);
+                    $labelAttributes = $element->getLabelAttributes();
         
-        if (in_array($type, $this->groupElements)) {
-            $options = $element->getAttribute('options');
-            foreach ($options as $key => $optionSpec) {
-                if (!isset($optionSpec['label_attributes']['class'])) {
-                    $options[$key]['label_attributes']['class'] = ($type == 'radio') ? 'radio' : 'checkbox';
-                    $options[$key]['label_attributes']['class'] .= (in_array($formStyle, $this->compactFormStyles)) ? ' inline' : null;
+                    if (empty($labelAttributes)) {
+                        $labelAttributes = $this->labelAttributes;
+                    }
+                    
+                    $labelAttributes['class'] = isset($labelAttributes['class']) 
+                                              ? $labelAttributes['class'] . ' control-label' 
+                                              : 'control-label';
+                    
+                    $labelOpen  = $labelHelper->openTag($labelAttributes);
+                    $labelClose = $labelHelper->closeTag();
                 }
             }
-            $element->setAttribute('options', $options);
+            
+            if (in_array($type, $this->groupElements)) {
+                $options = $element->getAttribute('options');
+                foreach ($options as $key => $optionSpec) {
+                    if (!isset($optionSpec['label_attributes']['class'])) {
+                        $options[$key]['label_attributes']['class'] = ($type == 'radio') ? 'radio' : 'checkbox';
+                        $options[$key]['label_attributes']['class'] .= (in_array($formStyle, $this->compactFormStyles)) ? ' inline' : null;
+                    }
+                }
+                $element->setAttribute('options', $options);
+            }
+            
+            
+            $elementString       = $elementHelper->render($element);
+            
+            $elementString = $this->renderBootstrapOptions($elementString, $bootstrapOptions);
+            
+            $markup = sprintf($this->defaultElementTemplates[$formStyle], 
+                $labelOpen,
+                $label,
+                $labelClose,
+                $elementString,
+                $elementErrors,
+                $elementStatus
+            );
         }
-        
-        
-        $elementString       = $elementHelper->render($element);
-        
-        $elementString = $this->renderBootstrapOptions($elementString, $bootstrapOptions);
-        
-        $markup = sprintf($this->defaultElementTemplates[$formStyle], 
-            $labelOpen,
-            $label,
-            $labelClose,
-            $elementString,
-            $elementErrors,
-            $elementStatus
-        );
-    
         
         return $markup;
     }
@@ -342,6 +349,33 @@ class BootstrapRow extends AbstractHelper
             $status = ' error ';
         }
         return $status;
+    }
+    
+    /**
+     * set the template to use in rendering
+     * 
+     * @param string $template
+     * @return NULL|string:
+     */
+    public function getDefaultElementTemplate($style) 
+    {
+        if (!isset($this->defaultElementTemplates[$style])) {
+            return null;
+        }
+        return $this->defaultElementTemplates[$style];
+    }
+    
+    /**
+     * set the template for a specified style
+     * 
+     * @param string $style
+     * @param string $template
+     * @return $this
+     */
+    public function setDefaultElementTemplate($style, $template)
+    {
+        $this->defaultElementTemplates[$style];
+        return $this;
     }
     
     /**

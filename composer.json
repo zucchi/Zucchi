@@ -1,0 +1,28 @@
+{
+    "name": "zucchi/zucchi",
+    "description": "Zucchi Component Library for Zend Framework 2",
+    "type": "library",
+    "keywords": [
+        "library",
+        "zf2"
+    ],
+    "homepage": "https://github.com/zucchi/Zucchi",
+    "authors" : [{
+        "name": "Matt Cockayne",
+        "email" : "matt@zucchi.co.uk"
+        "homepage" : "http://devincharge.com/"
+    }],
+    "license": "BSD-3-Clause",
+    "require": {
+        "php": ">=5.3.3"
+        "zendframework/zendframework": "dev-master",
+    },
+    "autoload": {
+        "psr-0": {
+            "Zucchi": "src/"
+        }
+        "classmap": [
+            "./"
+        ]
+    }
+}
