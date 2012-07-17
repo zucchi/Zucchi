@@ -9,7 +9,7 @@
     "homepage": "https://github.com/zucchi/Zucchi",
     "authors" : [{
         "name": "Matt Cockayne",
-        "email" : "matt@zucchi.co.uk"
+        "email" : "matt@zucchi.co.uk",
         "homepage" : "http://devincharge.com/"
     }],
     "license": "BSD-3-Clause",
