@@ -8,7 +8,7 @@
  */
 namespace Zucchi\Debug;
 
-use Zend\Debug as ZendDebug;
+use Zend\Debug\Debug as ZendDebug;
 
 /**
  * Custom Debug Utility
