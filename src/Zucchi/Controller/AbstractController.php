@@ -1,6 +1,6 @@
 <?php
 /**
- * Zucchi (http://framework.zend.com/)
+ * Zucchi (http://zucchi.co.uk)
  *
  * @link      http://github.com/zucchi/Zucchi for the canonical source repository
  * @copyright Copyright (c) 2005-2012 Zucchi Limited. (http://zucchi.co.uk)
@@ -38,47 +38,45 @@ abstract class AbstractController extends AbstractRestfulController
      */
     public function __construct()
     {
-        $flashMessenger = $this->flashMessenger();
-        if ($flashMessenger->hasMessages()) {
-            $this->messages = $flashMessenger->getMessages();
-        }
-        
+        $messenger = $this->flashMessenger();
+        $this->messages = $messenger->getMessages();
+        $this->messenger();
     }
     
     /**
-     * Return list of resources
+     * REST method: Return list of resources
      *
      * @return mixed
      */
     public function getList()
     {
-        
+        exit('GET REST interface not implemented');
     }
 
     /**
-     * Return single resource
+     * REST method: Return single resource
      *
      * @param  mixed $id
      * @return mixed
      */
     public function get($id)
     {
-        
+        exit('GET REST interface not implemented');
     }
 
     /**
-     * Create a new resource
+     * REST method: Create a new resource
      *
      * @param  mixed $data
      * @return mixed
      */
     public function create($data)
     {
-        
+        exit('POST REST interface not implemented');
     }
 
     /**
-     * Update an existing resource
+     * REST method: Update an existing resource
      *
      * @param  mixed $id
      * @param  mixed $data
@@ -86,18 +84,18 @@ abstract class AbstractController extends AbstractRestfulController
      */
     public function update($id, $data)
     {
-        
+        exit('PUT REST interface not implemented');
     }
 
     /**
-     * Delete an existing resource
+     * REST method: Delete an existing resource
      *
      * @param  mixed $id
      * @return mixed
      */
     public function delete($id)
     {
-        
+        exit('DELETE REST interface not implemented');
     }
     
     
@@ -109,11 +107,15 @@ abstract class AbstractController extends AbstractRestfulController
      * @return \Zend\View\Model\ViewModel
      */
     
-    protected function loadView($viewScript, $variables = array())
+    protected function loadView($viewScript = null, $variables = array())
     {
         // set the view
         $view = new ViewModel($variables);
-        $view->setTemplate($viewScript);
+        
+        // apply selected view script
+        if ($viewScript) {
+            $view->setTemplate($viewScript);
+        }
         
         // handle nested view scripts
         foreach ($this->nestedViews as $viewSpec) {
