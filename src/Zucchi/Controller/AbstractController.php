@@ -28,22 +28,6 @@ abstract class AbstractController extends AbstractRestfulController
     public $nestedViews = array();
     
     /**
-     * Messages to pass to view
-     * @var array
-     */
-    protected $messages = array();
-    
-    /**
-     * default constructor
-     */
-    public function __construct()
-    {
-        $messenger = $this->flashMessenger();
-        $this->messages = $messenger->getMessages();
-        $this->messenger();
-    }
-    
-    /**
      * REST method: Return list of resources
      *
      * @return mixed
@@ -125,7 +109,8 @@ abstract class AbstractController extends AbstractRestfulController
             $view = $nested;
         }
         
-        $this->layout()->setVariable('messages', $this->messages);
+        $messenger = $this->messenger()->addMessages($this->flashMessenger()->getMessages());
+        $this->layout()->setVariable('messages', $messenger);
         
         return $view;
         
