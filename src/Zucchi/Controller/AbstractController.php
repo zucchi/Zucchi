@@ -4,10 +4,12 @@
  *
  * @link      http://github.com/zucchi/Zucchi for the canonical source repository
  * @copyright Copyright (c) 2005-2012 Zucchi Limited. (http://zucchi.co.uk)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @license   http://zucchi.co.uk/legals/bsd-license New BSD License
  */
 namespace Zucchi\Controller;
 
+use Zend\View\Model\JsonModel;
+use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\View\Model\ViewModel;
 
