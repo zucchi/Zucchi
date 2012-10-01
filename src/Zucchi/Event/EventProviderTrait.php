@@ -7,7 +7,7 @@ use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManager;
 
-trait ProviderTrait
+trait EventProviderTrait
 {
     /**
      * @var EventManagerInterface
@@ -22,7 +22,11 @@ trait ProviderTrait
      */
     public function setEventManager(EventManagerInterface $events)
     {
-        $identifiers = array(__CLASS__, get_called_class());
+        $identifiers = array(
+            current(explode('\\', get_called_class())),// base namespace
+            __CLASS__, //  
+            get_called_class() // called class
+        );
         if (isset($this->eventIdentifier)) {
             if ((is_string($this->eventIdentifier))
                 || (is_array($this->eventIdentifier))

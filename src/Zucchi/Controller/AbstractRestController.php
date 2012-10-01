@@ -21,7 +21,7 @@ use Zend\View\Model\ViewModel;
  * @subpackage Controller
  * @category Components
  */
-abstract class AbstractController extends AbstractRestfulController
+abstract class AbstractRestController extends AbstractRestfulController
 {
     /**
      * array of layouts to nest view in
@@ -92,7 +92,6 @@ abstract class AbstractController extends AbstractRestfulController
      * @param section $section
      * @return \Zend\View\Model\ViewModel
      */
-    
     protected function loadView($viewScript = null, $variables = array())
     {
         // set the view
@@ -115,6 +114,5 @@ abstract class AbstractController extends AbstractRestfulController
         $this->layout()->setVariable('messages', $messenger);
         
         return $view;
-        
     }
 }
