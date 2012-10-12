@@ -16,13 +16,13 @@
     "repositories": [
         {
             "type": "pear",
-            "url": "http://pear2.php.net"
+            "url": "http://pear.php.net"
         }
     ],
     "require": {
         "php": ">=5.4.1",
         "zendframework/zendframework": "dev-master",
-        "pear-pear2/PEAR2_Archive_Tar": "*"
+        "pear-pear/PEAR2_Archive_Tar": "*"
     },
     "autoload": {
         "psr-0": {
