@@ -22,7 +22,7 @@
     "require": {
         "php": ">=5.4.1",
         "zendframework/zendframework": "dev-master",
-        "pear-pear2.php.net/PEAR2_Archive_Tar": "*"
+        "pear-pear2/PEAR2_Archive_Tar": "*"
     },
     "autoload": {
         "psr-0": {
