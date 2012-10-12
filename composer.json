@@ -29,7 +29,7 @@
             "Zucchi": "src/"
         },
         "classmap": [
-            "./"
+            "./Module.php"
         ]
     }
 }

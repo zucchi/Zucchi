@@ -98,4 +98,15 @@ class Debug extends ZendDebug
         }
         \xdebug_stop_trace();
     }
+
+    public function breakHere($condition = true)
+    {
+        if (!extension_loaded('xdebug')) {
+            throw new \RuntimeException('XDebug must be installed to use this function');
+        }
+
+        if ((is_callable($condition) && $condition()) || $condition) {
+            \xdebug_break();
+        }
+    }
 }
