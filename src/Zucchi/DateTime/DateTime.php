@@ -1,7 +1,8 @@
 <?php
 namespace Zucchi\DateTime;
 
-class DateTime extends \DateTime
+class DateTime extends \DateTime implements
+    \JsonSerializable
 {
     const MYSQL = 'Y-m-d H:i:s';
     const DATE = 'Y-m-d';
@@ -10,6 +11,20 @@ class DateTime extends \DateTime
     public function __toString()
     {
         return $this->format(self::MYSQL);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see JsonSerializable::jsonSerialize()
+     */
+    public function jsonSerialize()
+    {
+        return $this->__toString();
+    }
+
+    public function toJson()
+    {
+        return $this->__toString();
     }
     
     static public function createFromFormat($format, $time, $object = null)

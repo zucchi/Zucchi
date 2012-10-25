@@ -1,7 +1,8 @@
 <?php
 namespace Zucchi\DateTime;
 
-class Date extends DateTime
+class Date extends DateTime implements
+    \JsonSerializable
 {
     public function __toString()
     {
