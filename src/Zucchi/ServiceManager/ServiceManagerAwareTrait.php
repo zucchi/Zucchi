@@ -10,10 +10,14 @@ use Zend\ServiceManager\ServiceManager;
 trait ServiceManagerAwareTrait
 {
     /**
-     * @var EventManagerInterface
+     * @var ServiceManager
      */
     protected $serviceManager;
 
+    /**
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @return ServiceManagerAwareTrait
+     */
     public function setServiceManager(ServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;
@@ -21,11 +25,7 @@ trait ServiceManagerAwareTrait
     }
 
     /**
-     * Retrieve the event manager
-     *
-     * Lazy-loads an EventManager instance if none registered.
-     *
-     * @return EventManagerInterface
+     * @return ServiceManager
      */
     public function getServiceManager()
     {

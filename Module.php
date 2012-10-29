@@ -11,6 +11,20 @@ class Module implements
     ConfigProviderInterface
     
 {
+
+    public function onBootstrap($e)
+    {
+        $app = $e->getApplication();
+        $sm = $app->getServiceManager();
+
+        $serviceLoader = $sm->get('ServiceManager');
+        $serviceLoader->addInitializer(function ($instance) use ($sm) {
+            if (method_exists($instance, 'setServiceManager')) {
+                $instance->setServiceManager($sm);
+            }
+        });
+    }
+
     public function getAutoloaderConfig()
     {
         return array(

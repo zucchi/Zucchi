@@ -10,6 +10,8 @@ return array(
             // generic view helpers
             'truncate' => 'Zucchi\View\Helper\Truncate',
             'filter' => 'Zucchi\View\Helper\Filter',
+            'form_element' => 'Zucchi\Form\View\Helper\FormElement',
+            'form_imageFile' => 'Zucchi\Image\Form\View\Helper\ImageFile',
         ),
         'factories' => array(
             'filter' => function($sm) {
