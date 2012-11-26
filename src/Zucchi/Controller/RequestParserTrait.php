@@ -20,6 +20,7 @@ trait RequestParserTrait
     protected function parseWhere(Request $request)
     {
         $clauses = array(
+            'is'    => 'is',
             'eq'    => '=',
             'gt'    => '>',
             'gte'   => '>=',

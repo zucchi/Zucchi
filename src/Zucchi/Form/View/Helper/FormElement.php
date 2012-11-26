@@ -32,7 +32,10 @@ class FormElement extends ZendFormElement
 
         $type = $element->getAttribute('type');
 
-        if ($helper = $renderer->plugin('form_' . $type)) {
+        $pm = $renderer->getHelperPluginManager();
+
+        if ($pm->has('form_' . $type)) {
+            $helper = $pm->get('form_' . $type);
             return $helper($element);
         }
 
