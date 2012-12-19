@@ -8,6 +8,11 @@
  */
 
 namespace Zucchi\Exception;
+
+use Zend\Mail\Message;
+use Zend\Mail\Transport\Smtp as SmtpTransport;
+use Zend\Mail\Transport\SmtpOptions;
+
 /**
  * ErrorHandler - Class Description
  *
@@ -19,24 +24,52 @@ namespace Zucchi\Exception;
 
 class ErrorHandler
 {
-    public static function handleError($errno, $errstr, $errfile = null, $errline = null, array $errcontext = null){
-
-        if ($errstr !== null) {
-
-            if (empty($errstr)) {
+    /**
+     * catch errors and convert to exceptions
+     *
+     * @todo add severity handling to ignore notices and warnings
+     * @param $errno
+     * @param $errstr
+     * @param null $errfile
+     * @param null $errline
+     * @param array $errcontext
+     * @throws ErrorException
+     */
+    public static function handleError($errno, $errstr, $errfile = null, $errline = null, array $errcontext = null)
+    {
+        if (0 != error_reporting()) {
+            if (!$errstr) {
                 $errstr = 'Unknown error';
             }
-
-
-            $e = new ErrorException($errstr);
-            $e->setNo($errno);
-            $e->setFile($errfile);
-            $e->setLine($errline);
-
-
-            throw $e;
+            throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
         }
     }
 
+    /**
+     * Sends email error report
+     * @param
+     */
+    static public function sendErrorReport($error)
+    {
+        echo 'sending mail';
+        $emailBody = 'Error Report' . PHP_EOL;
 
+        $emailBody = $emailBody
+            . 'Exception Type: ' . $error->exceptionType . PHP_EOL
+            . 'Error No: '. (string) $error->errorNo . PHP_EOL
+            . 'Line: ' . $error->errorLine . PHP_EOL
+            . 'File: ' . $error->errorFile . PHP_EOL
+            . 'Message: '. $error->message . PHP_EOL
+            . PHP_EOL;
+
+
+        $mail = new Message();
+        $mail->setBody($emailBody);
+        $mail->addTo('dev@zucchi.co.uk');
+        $mail->setSubject('Tag Error');
+
+        $transport = new Mail\Transport\Sendmail();
+        $transport->send($mail);
+
+    }
 }
