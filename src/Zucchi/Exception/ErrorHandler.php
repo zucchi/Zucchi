@@ -49,17 +49,16 @@ class ErrorHandler
      * Sends email error report
      * @param
      */
-    static public function sendErrorReport($error)
+    static public function sendErrorReport(\Exception $e)
     {
-        echo 'sending mail';
         $emailBody = 'Error Report' . PHP_EOL;
 
         $emailBody = $emailBody
-            . 'Exception Type: ' . $error->exceptionType . PHP_EOL
-            . 'Error No: '. (string) $error->errorNo . PHP_EOL
-            . 'Line: ' . $error->errorLine . PHP_EOL
-            . 'File: ' . $error->errorFile . PHP_EOL
-            . 'Message: '. $error->message . PHP_EOL
+            . 'Exception Type: ' . get_class($e) . PHP_EOL
+            . 'Error No: '. $e->getCode(). PHP_EOL
+            . 'Line: ' . $e->getLine() . PHP_EOL
+            . 'File: ' . $e->getFile() . PHP_EOL
+            . 'Message: '. $e->getMessage() . PHP_EOL
             . PHP_EOL;
 
 
