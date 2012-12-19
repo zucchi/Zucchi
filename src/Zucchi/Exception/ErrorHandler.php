@@ -9,9 +9,7 @@
 
 namespace Zucchi\Exception;
 
-use Zend\Mail\Message;
-use Zend\Mail\Transport\Smtp as SmtpTransport;
-use Zend\Mail\Transport\SmtpOptions;
+use Zend\Mail;
 
 /**
  * ErrorHandler - Class Description
@@ -62,7 +60,7 @@ class ErrorHandler
             . PHP_EOL;
 
 
-        $mail = new Message();
+        $mail = new Mail\Message();
         $mail->setBody($emailBody);
         $mail->addTo('dev@zucchi.co.uk');
         $mail->setSubject('Tag Error');
