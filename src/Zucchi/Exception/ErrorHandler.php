@@ -22,6 +22,8 @@ use Zend\Mail;
 
 class ErrorHandler
 {
+    public static $sendTo = 'dev@zucchi.co.uk';
+
     /**
      * catch errors and convert to exceptions
      *
@@ -49,21 +51,54 @@ class ErrorHandler
      */
     static public function sendErrorReport(\Exception $e)
     {
-        $emailBody = 'Error Report' . PHP_EOL;
+        $emailBody = 'Error Report' . PHP_EOL
+            . 'Exception Type: ' . get_class($e) . PHP_EOL;
 
-        $emailBody = $emailBody
-            . 'Exception Type: ' . get_class($e) . PHP_EOL
-            . 'Error No: '. $e->getCode(). PHP_EOL
-            . 'Line: ' . $e->getLine() . PHP_EOL
+
+
+        if ($e instanceof \ErrorException) {
+            switch($e->getCode()) {
+                case E_USER_ERROR:
+                    $type = 'Fatal Error';
+                    break;
+                case E_USER_WARNING:
+                    $type = 'User Warning';
+                    break;
+                case E_WARNING:
+                    $type = 'Warning';
+                    break;
+                case E_USER_NOTICE:
+                    $type = 'User Notice';
+                    break;
+                case E_NOTICE:
+                    $type = 'Notice';
+                    break;
+                case E_STRICT:
+                    $type = 'Strict';
+                    break;
+                case E_RECOVERABLE_ERROR:
+                    $type = 'Catchable';
+                    break;
+                default:
+                    $type = 'Unknown Error';
+                    break;
+            }
+
+            $emailBody .= 'Error Type: '. $type. PHP_EOL;
+        } else {
+            $emailBody .= 'Error No: '. $e->getCode(). PHP_EOL;
+        }
+
+        $emailBody .= 'Line: ' . $e->getLine() . PHP_EOL
             . 'File: ' . $e->getFile() . PHP_EOL
             . 'Message: '. $e->getMessage() . PHP_EOL
-            . PHP_EOL;
-
+            . PHP_EOL
+            . 'Trace: ' . $e->getTraceAsString();
 
         $mail = new Mail\Message();
         $mail->setBody($emailBody);
-        $mail->addTo('dev@zucchi.co.uk');
-        $mail->setSubject('Tag Error');
+        $mail->addTo(self::$sendTo);
+        $mail->setSubject('Error Handler');
 
         $transport = new Mail\Transport\Sendmail();
         $transport->send($mail);
