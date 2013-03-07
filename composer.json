@@ -21,8 +21,7 @@
     ],
     "require": {
         "php": ">=5.4.1",
-        "zendframework/zendframework": "2.1.*",
-        "pear-pear/Archive_Tar": "*"
+        "zendframework/zendframework": "2.1.*"
     },
     "autoload": {
         "psr-0": {
