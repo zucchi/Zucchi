@@ -7,7 +7,6 @@ Custom extensions and additions to Zend Framework 2
 
 Components
 ----------
-*    Archive - tools to allow manipulation of archive files.
 *    Controller - Common controller features
 *    DateTime - Custom Date/Time objects with pre defined __toString
 *    Debug - Debug utilities
