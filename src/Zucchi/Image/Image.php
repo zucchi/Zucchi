@@ -3,7 +3,7 @@
  * Image.php - Image
  *
  * @link      http://github.com/zucchifor the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zucchi Limited (http://zucchi.co.uk)
+ * @copyright Copyright (c) 2005-2013 Zucchi Limited (http://zucchi.co.uk)
  * @license   http://zucchi.co.uk/legals/bsd-license New BSD License
  */
 
