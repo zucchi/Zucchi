@@ -46,8 +46,9 @@ class ErrorHandler
     }
 
     /**
-     * Sends email error report
-     * @param
+     * Sends email error report.
+     *
+     * @param \Exception $e
      */
     static public function sendErrorReport(\Exception $e)
     {
