@@ -3,7 +3,6 @@
 namespace Zucchi\Event;
 
 use Traversable;
-use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManager;
 
