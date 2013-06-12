@@ -55,8 +55,6 @@ class ErrorHandler
         $emailBody = 'Error Report' . PHP_EOL
             . 'Exception Type: ' . get_class($e) . PHP_EOL;
 
-
-
         if ($e instanceof \ErrorException) {
             switch($e->getCode()) {
                 case E_USER_ERROR:
@@ -103,6 +101,5 @@ class ErrorHandler
 
         $transport = new Mail\Transport\Sendmail();
         $transport->send($mail);
-
     }
 }
