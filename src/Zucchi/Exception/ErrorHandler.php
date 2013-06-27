@@ -94,7 +94,7 @@ class ErrorHandler
             . 'Trace: ' . $e->getTraceAsString();
 
         if ($previousException = $e->getPrevious()) {
-            $emailBody .= 'Previous Exception: ' . PHP_EOL;
+            $emailBody .= PHP_EOL . PHP_EOL. 'Previous Exception: ' . PHP_EOL;
             $emailBody .= 'Line: ' . $previousException->getLine() . PHP_EOL
                 . 'File: ' . $previousException->getFile() . PHP_EOL
                 . 'Message: '. $previousException->getMessage() . PHP_EOL . PHP_EOL
