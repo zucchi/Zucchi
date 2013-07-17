@@ -29,9 +29,15 @@ class DateTime extends \DateTime implements
     
     static public function createFromFormat($format, $time, $object = null)
     {
-        $ext_dt = new self();
+        $class = get_called_class();
+        $ext_dt = new $class;
 
-        $ext_dt->setTimestamp(parent::createFromFormat($format, $time)->getTimestamp());
+        $parent = \DateTime::createFromFormat($format, $time);
+
+        if ($parent) {
+            $timestamp = $parent->getTimestamp();
+            $ext_dt->setTimestamp($timestamp);
+        }
 
         return $ext_dt;
     }
