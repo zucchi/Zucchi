@@ -13,12 +13,5 @@ return array(
             'form_element' => 'Zucchi\Form\View\Helper\FormElement',
             'form_imageFile' => 'Zucchi\Image\Form\View\Helper\ImageFile',
         ),
-        'factories' => array(
-            'filter' => function($sm) {
-                $helper = new \Zucchi\View\Helper\Filter();
-                $helper->setServiceLocator($sm);
-                return $helper;
-            }
-        )
     ),
 );
