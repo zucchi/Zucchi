@@ -93,12 +93,12 @@ class ErrorHandler
             . 'Message: '. $e->getMessage() . PHP_EOL . PHP_EOL
             . 'Trace: ' . $e->getTraceAsString();
 
-        if ($previousException = $e->getPrevious()) {
+        while ($e = $e->getPrevious()) {
             $emailBody .= PHP_EOL . PHP_EOL. 'Previous Exception: ' . PHP_EOL;
-            $emailBody .= 'Line: ' . $previousException->getLine() . PHP_EOL
-                . 'File: ' . $previousException->getFile() . PHP_EOL
-                . 'Message: '. $previousException->getMessage() . PHP_EOL . PHP_EOL
-                . 'Trace: ' . $previousException->getTraceAsString();
+            $emailBody .= 'Line: ' . $e->getLine() . PHP_EOL
+                . 'File: ' . $e->getFile() . PHP_EOL
+                . 'Message: '. $e->getMessage() . PHP_EOL . PHP_EOL
+                . 'Trace: ' . $e->getTraceAsString();
         }
 
         $mail = new Mail\Message();
