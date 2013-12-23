@@ -40,4 +40,34 @@ class SetCookie extends ZendSetCookie
         $this->name = $name;
         return $this;
     }
+
+
+    /**
+     * @param  int|string $expires
+     * @throws Exception\InvalidArgumentException
+     * @return SetCookie
+     */
+    public function setExpires($expires)
+    {
+        if ($expires === null) {
+            $this->expires = null;
+            return $this;
+        }
+
+        if (is_string($expires)) {
+            $expires = strtotime($expires);
+        }
+
+        if ($expires === false) {
+            // assume strtotime failed
+            $expires = strtotime('now + 1 day');
+        }
+
+        if (!is_int($expires) || $expires < 0) {
+            throw new Exception\InvalidArgumentException('Invalid expires time specified');
+        }
+
+        $this->expires = $expires;
+        return $this;
+    }
 }
