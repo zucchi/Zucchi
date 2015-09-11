@@ -8,7 +8,6 @@ use Zend\EventManager\EventManager;
 
 // annotation namespaces
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Zend\Form\Annotation AS Form;
 
 trait EventProviderTrait

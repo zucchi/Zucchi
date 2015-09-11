@@ -22,7 +22,7 @@ use Zend\Mail;
 
 class ErrorHandler
 {
-    public static $sendTo = 'dev@zucchi.co.uk';
+    public static $sendTo = false;
 
     /**
      * catch errors and convert to exceptions
@@ -52,6 +52,12 @@ class ErrorHandler
      */
     static public function sendErrorReport(\Exception $e)
     {
+        $to = self::$sendTo;
+
+        if (!$to) {
+            return false;
+        }
+
         $emailBody = 'Error Report' . PHP_EOL
             . 'Exception Type: ' . get_class($e) . PHP_EOL;
 
@@ -107,6 +113,8 @@ class ErrorHandler
         $mail->setSubject('Error Handler');
 
         $transport = new Mail\Transport\Sendmail();
-        $transport->send($mail);
+        return $transport->send($mail);
+
+
     }
 }

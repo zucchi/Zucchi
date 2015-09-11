@@ -14,7 +14,7 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\View\Model\ViewModel;
 
 /**
- * Abstract controller to provide base for admin functoinality in Zucchi Modules
+ * Abstract controller to provide base for admin functionality in Zucchi Modules
  * 
  * @author Matt Cockayne <matt@zucchi.co.uk>
  * @package Zucchi
