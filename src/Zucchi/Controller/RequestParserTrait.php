@@ -17,7 +17,7 @@ trait RequestParserTrait
      * a format usable by the getList() method of the services.
      * @return array
      */
-    protected function parseWhere(Request $request)
+    protected function parseWhere(array $where = array())
     {
         $clauses = array(
             'is'    => 'is',
@@ -31,8 +31,6 @@ trait RequestParserTrait
             'fuzzy' => 'like',
             'regex' => 'regexp',
         );
-
-        $where = $request->getQuery('where', array());
 
         // loop through and sanitize the where statement
         foreach ($where as $field => &$value) {
