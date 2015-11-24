@@ -1,7 +1,9 @@
 <?php
 namespace Zucchi\Controller;
 
+use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Zend\Http\Request;
+use Doctrine\ORM\Query\Expr;
 /**
  * RequestParserTrait.php
  *
@@ -21,6 +23,8 @@ trait RequestParserTrait
         'lt'    => '<',
         'lte'   => '<=',
         'neq'   => '!=',
+        'in'   => 'in',
+        'nin'   => 'not in',
         'between' => 'between',
         'fuzzy' => 'like',
         'regex' => 'regexp',
@@ -69,13 +73,32 @@ trait RequestParserTrait
                 $where['mode'] = $this->requestModes['and'];
             }
 
-            foreach ($where['expressions'] as $index => &$expression) {
+            foreach ($where['expressions'] as $index => $expression) {
                 if (isset($expression['mode']) && isset($this->requestModes[$expression['mode']])) {
                     $expression['mode'] = $this->requestModes[$expression['mode']];
                 } else {
-                    $expression['mode'] = $expression['and'];
+                    $expression['mode'] = $this->requestModes['and'];
                 }
-                $expression['fields'] = $this->parseSimpleWhere($expression['fields'], $operators, $this->requestModes);
+
+                if (array_key_exists('expressions', $expression)) {
+                    $expression = $this->parseComplexWhere($expression);
+                }
+
+                if (!array_key_exists('fields', $expression)) {
+                    // enforce fields key by taking all none reserved keys (mode|expressions) and moving them to fields node
+                    $cleaned = array();
+                    $cleaned['mode'] = $expression['mode'];
+                    if (array_key_exists('expressions', $expression)) {
+                        $cleaned['expressions'] = $expression['expressions'];
+                    }
+                    unset($expression['mode']); // remove mode from fields
+                    $cleaned['fields'] = $expression;
+                    $expression = $cleaned;
+                }
+
+                $expression['fields'] = $this->parseSimpleWhere($expression['fields']);
+
+                $where['expressions'][$index] = $expression;
             }
         }
 
@@ -92,26 +115,30 @@ trait RequestParserTrait
     {
         // loop through and sanitize the where statement
         foreach ($where as $field => &$value) {
-            if (is_array($value)) {
-                if (isset($value['value']) && is_string($value['value']) && strlen($value['value'])) {
-                    if (isset($value['operator']) && isset($this->requestOperators[$value['operator']])) {
-                        $value['operator'] = $this->requestOperators[$value['operator']];
-                    } else {
-                        $value['operator'] = $this->requestOperators['eq'];
+            if (!$value instanceof Expr\Base) {
+                if (is_array($value)) {
+                    if (isset($value['value'])) {
+                        if (isset($value['operator']) && isset($this->requestOperators[$value['operator']])) {
+                            $value['operator'] = $this->requestOperators[$value['operator']];
+                        } else {
+                            $value['operator'] = $this->requestOperators['eq'];
+                        }
+
+                        if (isset($value['mode']) && isset($this->requestModes[$value['mode']])) {
+                            $value['mode'] = $this->requestModes[$value['mode']];
+                        } else {
+                            $value['mode'] = $this->requestModes['and'];
+                        }
                     }
 
-                    if (isset($value['mode']) && isset($this->requestModes[$value['mode']])) {
-                        $value['mode'] = $this->requestModes[$value['mode']];
-                    } else {
-                        $value['mode'] = $this->requestModes['and'];
-                    }
+
+                } else if (is_string($value) && strlen($value)) {
+                    $value = array(
+                        'mode' => $modes['and'],
+                        'operator' => $this->requestOperators['eq'],
+                        'value' => $value
+                    );
                 }
-            } else if (is_string($value) && strlen($value)) {
-                $value = array(
-                    'mode' => $modes['and'],
-                    'operator' => $this->requestOperators['eq'],
-                    'value' => $value
-                );
             }
         }
 
