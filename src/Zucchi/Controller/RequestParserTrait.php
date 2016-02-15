@@ -134,7 +134,7 @@ trait RequestParserTrait
 
                 } else if (is_string($value) && strlen($value)) {
                     $value = array(
-                        'mode' => $modes['and'],
+                        'mode' => $this->requestModes['and'],
                         'operator' => $this->requestOperators['eq'],
                         'value' => $value
                     );
